@@ -1,6 +1,18 @@
 ---
 name: major-partnership-insider
-description: Investigate potential major partnership / anchor-customer / M&A announcements for a public company in the next 30-120 days by cross-validating user-provided options flow with institutional filings (13F/Form 4), SEC disclosures (10-K/10-Q/8-K), operational signals (capex, hiring, permits, construction), and catalyst timeline. Use ONLY public or user-provided data. Output probability range, expected event type, announcement window, scenarios, and invalidation risks. Triggered by: "is X about to announce", "partnership probability for X", "event-driven analysis for X", "Bobby framework on X", "unusual options at X means what", or any request for forward-looking catalyst probability assessment on a specific ticker. Never outputs 100%. Never gives buy/sell instructions.
+description: >-
+  Investigate potential major partnership, anchor-customer, or M&A
+  announcements for a public company in the next 30-120 days by
+  cross-validating user-provided options flow with institutional filings
+  (13F, Form 4), SEC disclosures (10-K, 10-Q, 8-K), operational signals
+  (capex, hiring, permits, construction), and catalyst timeline. Use ONLY
+  public or user-provided data. Output probability range, expected event
+  type, announcement window, scenarios, and invalidation risks. Triggered
+  when the user asks whether X is about to announce, asks for partnership
+  probability on X, requests event-driven analysis or the Bobby framework
+  on X, asks what unusual options at X mean, or any forward-looking
+  catalyst probability assessment on a specific ticker. Never outputs
+  100%. Never gives buy/sell instructions.
 ---
 
 # Major Partnership Insider

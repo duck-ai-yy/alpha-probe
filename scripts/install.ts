@@ -17,11 +17,16 @@ function fail(msg: string): never {
   process.exit(1);
 }
 
-async function run(cmd: string[], cwd: string): Promise<void> {
+async function run(
+  cmd: string[],
+  cwd: string,
+  extraEnv?: Record<string, string>,
+): Promise<void> {
   const proc = Bun.spawn(cmd, {
     cwd,
     stdout: "inherit",
     stderr: "inherit",
+    env: extraEnv ? { ...process.env, ...extraEnv } : process.env,
   });
   const code = await proc.exited;
   if (code !== 0) {
@@ -84,8 +89,13 @@ async function main(): Promise<void> {
   const checkoutChanged = await ensureCheckout(pinnedSha);
 
   // Always run bun install — cheap if lockfile is unchanged.
-  log("running `bun install` inside ./dexter/");
-  await run(["bun", "install"], DEXTER_DIR);
+  // Use --ignore-scripts to skip Dexter's `playwright install chromium`
+  // postinstall: alpha-probe's skill prefers `web_fetch` over `browser` for
+  // static pages, and the playwright CDN is blocked in some sandboxed
+  // environments. Users who need JS-rendered pages can install Chromium
+  // manually after install via `cd dexter && bunx playwright install chromium`.
+  log("running `bun install` inside ./dexter/ (Playwright Chromium skipped)");
+  await run(["bun", "install", "--ignore-scripts"], DEXTER_DIR);
 
   const entry = resolve(DEXTER_DIR, "src/index.tsx");
   if (!existsSync(entry)) {
