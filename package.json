@@ -8,6 +8,7 @@
     "install:dexter": "bun run scripts/install.ts",
     "analyze": "bun run scripts/analyze.ts",
     "backtest:iren": "bun run scripts/backtest-iren.ts",
+    "verify": "bun run scripts/verify.ts",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {

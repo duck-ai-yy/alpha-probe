@@ -15,9 +15,12 @@ git clone <repo>
 cd alpha-probe
 cp .env.example .env       # fill in keys
 bun install
-bun run install:dexter
+bun run install:dexter     # clones Dexter at the pinned SHA into ./dexter/
+bun run verify             # confirms the skill is discoverable end-to-end
 bun run analyze
 ```
+
+`bun run verify` exercises Dexter's `discoverSkills()`, `buildSkillMetadataSection()`, and `skillTool.invoke()` against the local `.dexter/` directory. All 9 checks must pass before running `analyze`.
 
 ## Architecture
 
