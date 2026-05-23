@@ -7,6 +7,9 @@
   "scripts": {
     "install:dexter": "bun run scripts/install.ts",
     "analyze": "bun run scripts/analyze.ts",
+    "analyze:clean": "bun run scripts/analyze.ts --clean",
+    "clean:traces": "bun run scripts/clean-traces.ts",
+    "install:hooks": "bash scripts/install-precommit-hook.sh",
     "backtest:iren": "bun run scripts/backtest-iren.ts",
     "verify": "bun run scripts/verify.ts",
     "typecheck": "tsc --noEmit"

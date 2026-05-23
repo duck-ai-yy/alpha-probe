@@ -152,6 +152,33 @@ if (!toolOutput.includes(absHelper)) {
 }
 pass(`skillTool returns instructions with absolute helper paths`);
 
+// Data-hygiene wiring checks.
+const rulesContent = (
+  await import("node:fs")
+).readFileSync(rulesPath, "utf-8");
+const hygieneMarkers = [
+  "Persistence Discipline",
+  "memory_update",
+  "Prompt-Injection Vigilance",
+];
+const missingHygiene = hygieneMarkers.filter((m) => !rulesContent.includes(m));
+if (missingHygiene.length > 0) {
+  fail(`RULES.md missing data-hygiene sections: ${missingHygiene.join(", ")}`);
+}
+pass(`RULES.md includes data-hygiene + prompt-injection guardrails`);
+
+const cleanScript = resolve(ROOT, "scripts/clean-traces.ts");
+if (!existsSync(cleanScript)) {
+  fail(`scripts/clean-traces.ts missing`);
+}
+pass(`scripts/clean-traces.ts present`);
+
+const hookInstaller = resolve(ROOT, "scripts/install-precommit-hook.sh");
+if (!existsSync(hookInstaller)) {
+  fail(`scripts/install-precommit-hook.sh missing`);
+}
+pass(`pre-commit hook installer present`);
+
 console.log("");
 console.log("[verify] All checks passed. The integration is wired up correctly.");
 console.log("[verify] To run the agent end-to-end:");

@@ -1,19 +1,42 @@
 node_modules/
-.env
-.env.local
 
+# --- secrets ---
+# Block all .env files except the template.
+.env
+.env.*
+!.env.example
+
+# --- vendored upstream ---
 dexter/
 
+# --- Dexter runtime traces (research history) ---
 .dexter/cache/
 .dexter/settings.json
 .dexter/memory/
 .dexter/cron/
 .dexter/HEARTBEAT.md
 
+# --- user-pasted inputs ---
+# Allow IREN fixture spec to remain in git; everything else is private.
 .dexter/inputs/**
 !.dexter/inputs/.gitkeep
 !.dexter/inputs/IREN/
 !.dexter/inputs/IREN/**
+# But never commit options.md even in IREN (it may contain licensed broker data).
+.dexter/inputs/**/options.md
 
+# --- common slip files ---
 .DS_Store
 *.log
+*.tmp
+*.swp
+.idea/
+.vscode/
+
+# --- credentials in unusual places ---
+*.pem
+*.key
+id_rsa
+id_rsa.*
+credentials.json
+secrets.json

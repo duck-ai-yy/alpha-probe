@@ -20,7 +20,7 @@ bun run verify             # confirms the skill is discoverable end-to-end
 bun run analyze
 ```
 
-`bun run verify` exercises Dexter's `discoverSkills()`, `buildSkillMetadataSection()`, and `skillTool.invoke()` against the local `.dexter/` directory. All 9 checks must pass before running `analyze`.
+`bun run verify` exercises Dexter's `discoverSkills()`, `buildSkillMetadataSection()`, and `skillTool.invoke()` against the local `.dexter/` directory, plus data-hygiene wiring (RULES.md guardrails, clean-traces and pre-commit hook installers present). All 12 checks must pass before running `analyze`.
 
 ## Architecture
 
@@ -66,3 +66,22 @@ bun run install:dexter
 ```
 
 The install script is idempotent: it fetches, checks out the pinned SHA into the vendored `./dexter/`, and runs `bun install` inside it.
+## Data hygiene
+
+Default-safe out of the box; opt in to more if you want.
+
+| Behavior | Status | Notes |
+|---|---|---|
+| `.env` chmod 600 | automatic on install + each analyze | `bun run install:dexter` and `bun run analyze` enforce |
+| Warn on extra LLM keys (OPENAI / GOOGLE / etc.) | automatic | They widen the set of providers that see your prompts and embeddings |
+| Warn on `LANGSMITH_TRACING=true` | automatic | Every LLM call ships to LangSmith if on |
+| Wipe `.dexter/memory` and `.dexter/cache` after run | opt-in | `bun run analyze:clean` or `bun run clean:traces` |
+| Pre-commit hook (blocks `.env`, `options.md`, API-key patterns) | opt-in | `bun run install:hooks` (one-shot) |
+| `.gitignore` blocks all `.env*` (except example), all `options.md`, all trace dirs | always | Plus `*.pem`, `*.key`, `credentials.json`, etc. |
+| RULES.md tells agent not to persist tickers / pastes / secrets and to refuse prompt-injection-like instructions | always | Loaded into system prompt every session |
+
+Things you still own:
+- LLM provider sees your prompts. Use Anthropic ZDR / AWS Bedrock if you need stronger guarantees.
+- Financial Datasets sees your ticker queries. No fix short of self-hosting EDGAR.
+- The repo itself. Decide public vs private deliberately — private if your methodology or watchlist is alpha.
+- Broker-licensed options data. Sanitize before pasting if your broker's T&C forbids resharing.
