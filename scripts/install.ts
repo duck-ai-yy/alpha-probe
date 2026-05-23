@@ -103,11 +103,26 @@ async function main(): Promise<void> {
   }
 
   log(`Dexter ready at ${DEXTER_DIR}${checkoutChanged ? " (updated)" : ""}`);
+
+  // Harden .env permissions if present.
+  const envPath = resolve(ROOT, ".env");
+  if (existsSync(envPath)) {
+    const { chmodSync, statSync } = await import("node:fs");
+    const mode = statSync(envPath).mode & 0o777;
+    if (mode !== 0o600) {
+      log(`tightening .env permissions ${mode.toString(8)} -> 600`);
+      chmodSync(envPath, 0o600);
+    }
+  }
+
   console.log("");
   console.log("Next steps:");
-  console.log("  1. cp .env.example .env");
-  console.log("  2. Fill in required keys (FINANCIAL_DATASETS_API_KEY + one LLM key + one web-search key)");
-  console.log("  3. bun run analyze");
+  console.log("  1. cp .env.example .env  (then chmod 600 .env)");
+  console.log("  2. Fill required keys: FINANCIAL_DATASETS_API_KEY, ANTHROPIC_API_KEY, one search key");
+  console.log("  3. (recommended) Leave OPENAI_API_KEY and GOOGLE_API_KEY EMPTY to keep");
+  console.log("     embeddings out of those providers' logs. analyze warns if they are set.");
+  console.log("  4. bun run verify   (confirm 9/9 PASS)");
+  console.log("  5. bun run analyze  (or: bun run analyze:clean to wipe traces after)");
 }
 
 await main();
