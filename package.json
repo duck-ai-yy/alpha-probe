@@ -1,0 +1,17 @@
+{
+  "name": "alpha-probe",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Event-driven AI-infra research practice combining Dexter (autonomous research) and Bobby (4-layer evidence chain)",
+  "scripts": {
+    "install:dexter": "bun run scripts/install.ts",
+    "analyze": "bun run scripts/analyze.ts",
+    "backtest:iren": "bun run scripts/backtest-iren.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "@types/bun": "latest"
+  }
+}
